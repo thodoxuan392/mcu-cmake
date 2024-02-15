@@ -1,8 +1,8 @@
 include_guard()
 
-########################################################################################################################
-#                                                     Hex file                                                         #
-########################################################################################################################
+# #######################################################################################################################
+# Hex file                                                         #
+# #######################################################################################################################
 function(add_hex_output target #[[hex_file_name]])
     set(hex_file_name $<TARGET_FILE_BASE_NAME:${target}>.hex)
 
@@ -13,17 +13,16 @@ function(add_hex_output target #[[hex_file_name]])
 
     add_custom_command(TARGET ${target}
         POST_BUILD
-            COMMAND
-                ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE_NAME:${target}> ${hex_file_name}
-            WORKING_DIRECTORY
-                $<TARGET_FILE_DIR:${target}>
+        COMMAND
+        ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE_NAME:${target}> ${hex_file_name}
+        WORKING_DIRECTORY
+        $<TARGET_FILE_DIR:${target}>
     )
 endfunction()
 
-
-########################################################################################################################
-#                                                     Binary file                                                      #
-########################################################################################################################
+# #######################################################################################################################
+# Binary file                                                      #
+# #######################################################################################################################
 function(add_bin_output target #[[bin_file_name]])
     set(bin_file_name $<TARGET_FILE_BASE_NAME:${target}>.bin)
 
@@ -34,18 +33,17 @@ function(add_bin_output target #[[bin_file_name]])
 
     add_custom_command(TARGET ${target}
         POST_BUILD
-            COMMAND
-                ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE_NAME:${target}> ${bin_file_name}
-            WORKING_DIRECTORY
-                $<TARGET_FILE_DIR:${target}>
+        COMMAND
+        ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE_NAME:${target}> ${bin_file_name}
+        WORKING_DIRECTORY
+        $<TARGET_FILE_DIR:${target}>
     )
 endfunction()
 
-
-########################################################################################################################
-#                                                     Map files                                                      #
-########################################################################################################################
-function(add_map_output  #[[target]])
+# #######################################################################################################################
+# Map files                                                      #
+# #######################################################################################################################
+function(add_map_output #[[target]])
     if(${ARGC} GREATER 0)
         set(target ${ARGV0})
     else()
@@ -54,15 +52,14 @@ function(add_map_output  #[[target]])
 
     target_link_options(${target}
         PRIVATE
-            -Wl,-Map=$<TARGET_FILE_BASE_NAME:${target}>.map
+        -Wl,-Map=$<TARGET_FILE_BASE_NAME:${target}>.map
     )
 endfunction()
 
-
-########################################################################################################################
-#                                                     List output                                                      #
-########################################################################################################################
-function(add_list_output  #[[target]])
+# #######################################################################################################################
+# List output                                                      #
+# #######################################################################################################################
+function(add_list_output #[[target]])
     if(${ARGC} GREATER 0)
         set(target ${ARGV0})
     else()
@@ -70,18 +67,17 @@ function(add_list_output  #[[target]])
     endif()
 
     add_custom_command(TARGET ${target}
-    POST_BUILD
+        POST_BUILD
         COMMAND
-            ${CMAKE_OBJDUMP} -h -S $<TARGET_FILE_NAME:${target}> > $<TARGET_FILE_BASE_NAME:${target}>.list
+        ${CMAKE_OBJDUMP} -h -S $<TARGET_FILE_NAME:${target}> > $<TARGET_FILE_BASE_NAME:${target}>.list
         WORKING_DIRECTORY
-            $<TARGET_FILE_DIR:${target}>
+        $<TARGET_FILE_DIR:${target}>
     )
 endfunction()
 
-
-########################################################################################################################
-#                                                     Stack usage                                                      #
-########################################################################################################################
+# #######################################################################################################################
+# Stack usage                                                      #
+# #######################################################################################################################
 function(add_stack_usage_information #[[target]])
     if(${ARGC} GREATER 0)
         set(target ${ARGV0})
@@ -91,7 +87,11 @@ function(add_stack_usage_information #[[target]])
 
     target_compile_options(${target}
         PRIVATE
-            -fstack-usage
+        -fstack-usage
+    )
+
+    target_link_options(${target}
+        PRIVATE
+        -Wl,--print-memory-usage
     )
 endfunction()
-
