@@ -1,21 +1,20 @@
-#####################
-### Target system ###
-#####################
+# ####################
+# ## Target system ###
+# ####################
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR ARM)
 
-
-########################
-### Select the tools ###
-########################
+# #######################
+# ## Select the tools ###
+# #######################
 set(CMAKE_C_COMPILER arm-none-eabi-gcc)
 set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
 set(CMAKE_OBJCOPY arm-none-eabi-objcopy)
 set(CMAKE_SIZE arm-none-eabi-size)
 
-############################################
-### Set the default flags for the target ###
-############################################
+# ###########################################
+# ## Set the default flags for the target ###
+# ###########################################
 # Default ASM Flags
 set(CMAKE_ASM_FLAGS "-x assembler-with-cpp")
 
@@ -43,6 +42,8 @@ add_link_options(
 
     -fno-exceptions
     -fno-rtti
-    -Wl,--gc-sections
+    -Xlinker
+    --gc-sections
     --specs=nosys.specs
+    --specs=nano.specs
 )
