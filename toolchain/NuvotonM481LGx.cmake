@@ -7,10 +7,18 @@ set(CMAKE_SYSTEM_PROCESSOR ARM)
 # #######################
 # ## Select the tools ###
 # #######################
-set(CMAKE_C_COMPILER arm-none-eabi-gcc)
-set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
-set(CMAKE_OBJCOPY arm-none-eabi-objcopy)
-set(CMAKE_SIZE arm-none-eabi-size)
+if (WIN32 OR MSVC)
+    set(CMAKE_C_COMPILER arm-none-eabi-gcc.exe)
+    set(CMAKE_CXX_COMPILER arm-none-eabi-g++.exe)
+    set(CMAKE_OBJCOPY arm-none-eabi-objcopy.exe)
+    set(CMAKE_SIZE arm-none-eabi-size.exe)
+elseif (UNIX)
+    set(CMAKE_C_COMPILER arm-none-eabi-gcc)
+    set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
+    set(CMAKE_OBJCOPY arm-none-eabi-objcopy)
+    set(CMAKE_SIZE arm-none-eabi-size) 
+endif()
+
 
 # ###########################################
 # ## Set the default flags for the target ###
