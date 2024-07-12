@@ -1,6 +1,6 @@
 function(add_dw1000_lib)
     set(oneValueArgs PATH TARGET_NAME)
-    set(multiValueArgs EXTRA_INCLUDES DEPENDENCIES)
+    set(multiValueArgs EXTRA_INCLUDES DEPENDENCIES PREPROCESSOR)
     set(options)
 
     cmake_parse_arguments(DW1000 "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -22,6 +22,14 @@ function(add_dw1000_lib)
         target_include_directories(${DW1000_TARGET_NAME}
             PUBLIC
             ${INC}
+        )
+    endforeach()
+
+    # Preprocessor
+    foreach(PP ${DW1000_PREPROCESSOR})
+        target_compile_definitions(${DW1000_TARGET_NAME}
+            PUBLIC
+            ${PP}
         )
     endforeach()
 
