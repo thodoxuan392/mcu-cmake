@@ -10,8 +10,29 @@ function(add_nrf52sdk_lib)
     target_sources(
         ${NRF5SDK_TARGET_NAME}
         PRIVATE
+        ${NRF5SDK_PATH}/modules/nrfx/soc/nrfx_atomic.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_clock.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_ppi.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_saadc.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_gpiote.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/prs/nrfx_prs.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_uart.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_uarte.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_adc.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_twi.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_twim.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_qspi.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_spi.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_spim.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_timer.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_rtc.c
+
+        ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_clock.c
+        ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_ppi.c
+        ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_uart.c
+        ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_twi.c
+        ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_spi.c
+
         ${NRF5SDK_PATH}/components/libraries/log/src/nrf_log_backend_rtt.c
         ${NRF5SDK_PATH}/components/libraries/log/src/nrf_log_backend_serial.c
         ${NRF5SDK_PATH}/components/libraries/log/src/nrf_log_default_backends.c
@@ -33,8 +54,6 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/libraries/atomic_flags/nrf_atflags.c
         ${NRF5SDK_PATH}/components/libraries/atomic/nrf_atomic.c
         ${NRF5SDK_PATH}/components/libraries/balloc/nrf_balloc.c
-        ${NRF5SDK_PATH}/external/fprintf/nrf_fprintf.c
-        ${NRF5SDK_PATH}/external/fprintf/nrf_fprintf_format.c
         ${NRF5SDK_PATH}/components/libraries/memobj/nrf_memobj.c
         ${NRF5SDK_PATH}/components/libraries/pwr_mgmt/nrf_pwr_mgmt.c
         ${NRF5SDK_PATH}/components/libraries/ringbuf/nrf_ringbuf.c
@@ -43,19 +62,9 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/libraries/strerror/nrf_strerror.c
         ${NRF5SDK_PATH}/components/libraries/uart/retarget.c
         ${NRF5SDK_PATH}/components/boards/boards.c
-        ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_clock.c
-        ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_uart.c
-        ${NRF5SDK_PATH}/modules/nrfx/soc/nrfx_atomic.c
-        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_clock.c
-        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_gpiote.c
-        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/prs/nrfx_prs.c
-        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_uart.c
-        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_uarte.c
         ${NRF5SDK_PATH}/components/libraries/bsp/bsp.c
         ${NRF5SDK_PATH}/components/libraries/bsp/bsp_btn_ble.c
-        ${NRF5SDK_PATH}/external/segger_rtt/SEGGER_RTT.c
-        ${NRF5SDK_PATH}/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c
-        ${NRF5SDK_PATH}/external/segger_rtt/SEGGER_RTT_printf.c
+
         ${NRF5SDK_PATH}/components/ble/common/ble_advdata.c
         ${NRF5SDK_PATH}/components/ble/ble_advertising/ble_advertising.c
         ${NRF5SDK_PATH}/components/ble/common/ble_conn_params.c
@@ -64,17 +73,30 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/ble/common/ble_srv_common.c
         ${NRF5SDK_PATH}/components/ble/nrf_ble_gatt/nrf_ble_gatt.c
         ${NRF5SDK_PATH}/components/ble/nrf_ble_qwr/nrf_ble_qwr.c
-        ${NRF5SDK_PATH}/external/utf_converter/utf.c
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_nus/ble_nus.c
         ${NRF5SDK_PATH}/components/softdevice/common/nrf_sdh.c
         ${NRF5SDK_PATH}/components/softdevice/common/nrf_sdh_ble.c
         ${NRF5SDK_PATH}/components/softdevice/common/nrf_sdh_soc.c
+
+        ${NRF5SDK_PATH}/external/segger_rtt/SEGGER_RTT.c
+        ${NRF5SDK_PATH}/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c
+        ${NRF5SDK_PATH}/external/segger_rtt/SEGGER_RTT_printf.c
+        ${NRF5SDK_PATH}/external/utf_converter/utf.c
+        ${NRF5SDK_PATH}/external/fprintf/nrf_fprintf.c
+        ${NRF5SDK_PATH}/external/fprintf/nrf_fprintf_format.c
     )
 
     target_include_directories(
         ${NRF5SDK_TARGET_NAME}
         SYSTEM
         PUBLIC
+        ${NRF5SDK_PATH}/modules/nrfx/hal
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/include
+        ${NRF5SDK_PATH}/modules/nrfx/mdk
+        ${NRF5SDK_PATH}/modules/nrfx
+
+        ${NRF5SDK_PATH}/integration/nrfx/legacy
+
         ${NRF5SDK_PATH}/components/nfc/ndef/generic/message
         ${NRF5SDK_PATH}/components/nfc/t2t_lib
         ${NRF5SDK_PATH}/components/nfc/t4t_parser/hl_detection_procedure
@@ -85,7 +107,6 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/libraries/usbd/class/hid/generic
         ${NRF5SDK_PATH}/components/libraries/usbd/class/msc
         ${NRF5SDK_PATH}/components/libraries/usbd/class/hid
-        ${NRF5SDK_PATH}/modules/nrfx/hal
         ${NRF5SDK_PATH}/components/nfc/ndef/conn_hand_parser/le_oob_rec_parser
         ${NRF5SDK_PATH}/components/libraries/log
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_gls
@@ -100,9 +121,7 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/nfc/ndef/generic/record
         ${NRF5SDK_PATH}/components/nfc/t4t_parser/cc_file
         ${NRF5SDK_PATH}/components/ble/ble_advertising
-        ${NRF5SDK_PATH}/external/utf_converter
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_bas_c
-        ${NRF5SDK_PATH}/modules/nrfx/drivers/include
         ${NRF5SDK_PATH}/components/libraries/experimental_task_manager
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_hrs_c
         ${NRF5SDK_PATH}/components/softdevice/s140/headers/nrf52
@@ -132,7 +151,6 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/libraries/low_power_pwm
         ${NRF5SDK_PATH}/components/nfc/ndef/conn_hand_parser/ble_oob_advdata_parser
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_dfu
-        ${NRF5SDK_PATH}/external/fprintf
         ${NRF5SDK_PATH}/components/libraries/svc
         ${NRF5SDK_PATH}/components/libraries/atomic
         ${NRF5SDK_PATH}/components
@@ -155,7 +173,6 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/libraries/usbd/class/hid/kbd
         ${NRF5SDK_PATH}/components/libraries/timer
         ${NRF5SDK_PATH}/components/softdevice/s140/headers
-        ${NRF5SDK_PATH}/integration/nrfx
         ${NRF5SDK_PATH}/components/nfc/t4t_parser/tlv
         ${NRF5SDK_PATH}/components/libraries/sortlist
         ${NRF5SDK_PATH}/components/libraries/spi_mngr
@@ -163,7 +180,6 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/nfc/ndef/conn_hand_parser
         ${NRF5SDK_PATH}/components/libraries/sdcard
         ${NRF5SDK_PATH}/components/nfc/ndef/parser/record
-        ${NRF5SDK_PATH}/modules/nrfx/mdk
         ${NRF5SDK_PATH}/components/ble/ble_link_ctx_manager
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_nus
         ${NRF5SDK_PATH}/components/libraries/twi_mngr
@@ -186,12 +202,9 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/ble/nrf_ble_qwr
         ${NRF5SDK_PATH}/components/libraries/gpiote
         ${NRF5SDK_PATH}/components/libraries/button
-        ${NRF5SDK_PATH}/modules/nrfx
         ${NRF5SDK_PATH}/components/libraries/twi_sensor
-        ${NRF5SDK_PATH}/integration/nrfx/legacy
         ${NRF5SDK_PATH}/components/libraries/usbd
         ${NRF5SDK_PATH}/components/nfc/ndef/connection_handover/ep_oob_rec
-        ${NRF5SDK_PATH}/external/segger_rtt
         ${NRF5SDK_PATH}/components/libraries/atomic_fifo
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_lbs_c
         ${NRF5SDK_PATH}/components/nfc/ndef/connection_handover/ble_pair_lib
@@ -206,6 +219,10 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/nfc/ndef/conn_hand_parser/ac_rec_parser
         ${NRF5SDK_PATH}/components/libraries/stack_guard
         ${NRF5SDK_PATH}/components/libraries/log/src
+
+        ${NRF5SDK_PATH}/external/utf_converter
+        ${NRF5SDK_PATH}/external/fprintf
+        ${NRF5SDK_PATH}/external/segger_rtt
     )
 
     target_compile_options(
@@ -227,6 +244,7 @@ function(add_nrf52sdk_lib)
         NRF_SD_BLE_API_VERSION=7
         S140
         SOFTDEVICE_PRESENT
+        TWI_PRESENT
     )
 
     # Extra includes
