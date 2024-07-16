@@ -15,6 +15,7 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_ppi.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_saadc.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_gpiote.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_power.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/prs/nrfx_prs.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_uart.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_uarte.c
@@ -26,8 +27,10 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_spim.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_timer.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_rtc.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_usbd.c
 
         ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_clock.c
+        ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_power.c
         ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_ppi.c
         ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_uart.c
         ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_twi.c
@@ -61,9 +64,14 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/libraries/sortlist/nrf_sortlist.c
         ${NRF5SDK_PATH}/components/libraries/strerror/nrf_strerror.c
         ${NRF5SDK_PATH}/components/libraries/uart/retarget.c
-        ${NRF5SDK_PATH}/components/boards/boards.c
         ${NRF5SDK_PATH}/components/libraries/bsp/bsp.c
         ${NRF5SDK_PATH}/components/libraries/bsp/bsp_btn_ble.c
+        ${NRF5SDK_PATH}/components/libraries/usbd/app_usbd.c
+        ${NRF5SDK_PATH}/components/libraries/usbd/class/cdc/acm/app_usbd_cdc_acm.c
+        ${NRF5SDK_PATH}/components/libraries/usbd/app_usbd_core.c
+        ${NRF5SDK_PATH}/components/libraries/usbd/app_usbd_serial_num.c
+        ${NRF5SDK_PATH}/components/libraries/usbd/app_usbd_string_desc.c
+        ${NRF5SDK_PATH}/components/boards/boards.c
 
         ${NRF5SDK_PATH}/components/ble/common/ble_advdata.c
         ${NRF5SDK_PATH}/components/ble/ble_advertising/ble_advertising.c
@@ -144,6 +152,10 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/libraries/delay
         ${NRF5SDK_PATH}/components/libraries/csense_drv
         ${NRF5SDK_PATH}/components/libraries/memobj
+
+        ${NRF5SDK_PATH}/components/libraries/usbd
+        ${NRF5SDK_PATH}/components/libraries/usbd/class/cdc
+        ${NRF5SDK_PATH}/components/libraries/usbd/class/cdc/acm
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_nus_c
         ${NRF5SDK_PATH}/components/softdevice/common
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_ias
