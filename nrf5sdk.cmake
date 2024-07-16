@@ -12,6 +12,7 @@ function(add_nrf52sdk_lib)
         PRIVATE
         ${NRF5SDK_PATH}/modules/nrfx/soc/nrfx_atomic.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_clock.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_systick.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_ppi.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_saadc.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_gpiote.c
@@ -274,4 +275,34 @@ function(add_nrf52sdk_lib)
             ${DEF}
         )
     endforeach()
+endfunction()
+
+function(add_nrf_flash_target #[[scriptPath]] #[[cfgFile]] #[[hexFile]])
+    if(${ARGC} GREATER 0)
+        set(scriptPath ${ARGV0})
+    else()
+        message(FATAL_ERROR "Please specified a script path for OpenOCD")
+    endif()
+
+    if(${ARGC} GREATER 1)
+        set(cfgFile ${ARGV1})
+    else()
+        message(FATAL_ERROR "Please specified a path of openocd cfg file for flashing")
+    endif()
+
+    if(${ARGC} GREATER 2)
+        set(hexFile ${ARGV2})
+    else()
+        set(hexFile ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
+    endif()
+
+    set(TARGET_NAME "flash")
+
+    add_custom_target(${TARGET_NAME}
+        COMMAND export PROJ_HEX_FILE=${hexFile}
+        COMMAND export PROJ_ROOT=${PROJECT_SOURCE_DIR}
+
+        COMMAND nrfjprog --chiperase --program ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex --verify
+        VERBATIM USES_TERMINAL
+    )
 endfunction()
