@@ -277,7 +277,7 @@ function(add_nrf52sdk_lib)
     endforeach()
 endfunction()
 
-function(add_nrf_flash_target #[[scriptPath]] #[[cfgFile]] #[[hexFile]])
+function(add_nrf_flash_target #[[scriptPath]] #[[cfgFile]] #[[hexFile]] #[[softDeviceHex]])
     if(${ARGC} GREATER 0)
         set(scriptPath ${ARGV0})
     else()
@@ -293,7 +293,13 @@ function(add_nrf_flash_target #[[scriptPath]] #[[cfgFile]] #[[hexFile]])
     if(${ARGC} GREATER 2)
         set(hexFile ${ARGV2})
     else()
-        set(hexFile ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
+        message(FATAL_ERROR "Please specified a path to application hex file for flashing")
+    endif()
+
+    if(${ARGC} GREATER 3)
+        set(softDeviceHex ${ARGV3})
+    else()
+        message(FATAL_ERROR "Please specified a path to soft device hex file for flashing")
     endif()
 
     set(TARGET_NAME "flash")
@@ -301,8 +307,8 @@ function(add_nrf_flash_target #[[scriptPath]] #[[cfgFile]] #[[hexFile]])
     add_custom_target(${TARGET_NAME}
         COMMAND export PROJ_HEX_FILE=${hexFile}
         COMMAND export PROJ_ROOT=${PROJECT_SOURCE_DIR}
-
-        COMMAND nrfjprog --chiperase --program ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex --verify
+        COMMAND nrfjprog -f nrf52 --chiperase --program ${softDeviceHex} --verify
+        COMMAND nrfjprog -f nrf52 --program ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex --verify
         VERBATIM USES_TERMINAL
     )
 endfunction()
