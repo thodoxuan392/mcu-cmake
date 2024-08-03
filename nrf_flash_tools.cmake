@@ -38,38 +38,31 @@ function(add_nrf_flash_target_with_dfu_over_usb)
     endif()
 
     if(${ARGC} GREATER 1)
-        set(mbrHex ${ARGV1})
-    else()
-        message(FATAL_ERROR "Please specified a path to mbr hex file for flashing")
-    endif()
-
-    if(${ARGC} GREATER 2)
-        set(usbBootloaderHex ${ARGV2})
-    else()
-        message(FATAL_ERROR "Please specified a path to usb bootloader hex file for flashing")
-    endif()
-
-    if(${ARGC} GREATER 3)
-        set(softDeviceHex ${ARGV3})
+        set(softDeviceHex ${ARGV1})
     else()
         message(FATAL_ERROR "Please specified a path to soft device hex file for flashing")
     endif()
 
-    if(${ARGC} GREATER 4)
-        set(mainAppHex ${ARGV4})
+    if(${ARGC} GREATER 2)
+        set(mainAppHex ${ARGV2})
     else()
-        set(mainAppHex ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
+        message(FATAL_ERROR "Please specified a path to main application hex file for flashing")
+    endif()
+
+    if(${ARGC} GREATER 3)
+        set(usbBootloaderHex ${ARGV3})
+    else()
+        message(FATAL_ERROR "Please specified a path to usb bootloader hex file for flashing")
     endif()
 
     set(TARGET_NAME "flash_with_usb_bootloader")
 
     add_custom_target(${TARGET_NAME}
-        COMMAND export PROJ_HEX_FILE=${hexFile}
+        COMMAND export PROJ_HEX_FILE=${mainAppHex}
         COMMAND export PROJ_ROOT=${PROJECT_SOURCE_DIR}
         COMMAND nrfjprog -f nrf52 --chiperase
-        COMMAND nrfjprog -f nrf52 --program ${mbrHex} --verify # Flash Master Boot Record
-        COMMAND nrfjprog -f nrf52 --program ${usbBootloaderHex} --verify # Flash USB bootloader
         COMMAND nrfjprog -f nrf52 --program ${softDeviceHex} --verify # Flash Soft Device
+        COMMAND nrfjprog -f nrf52 --program ${usbBootloaderHex} --verify # Flash USB bootloader
         COMMAND nrfjprog -f nrf52 --program ${mainAppHex} --verify # Flash Main Application
         VERBATIM USES_TERMINAL
     )
@@ -83,38 +76,31 @@ function(add_nrf_flash_target_with_dfu_over_ble)
     endif()
 
     if(${ARGC} GREATER 1)
-        set(mbrHex ${ARGV1})
-    else()
-        message(FATAL_ERROR "Please specified a path to mbr hex file for flashing")
-    endif()
-
-    if(${ARGC} GREATER 2)
-        set(bleBootloaderHex ${ARGV2})
-    else()
-        message(FATAL_ERROR "Please specified a path to ble bootloader hex file for flashing")
-    endif()
-
-    if(${ARGC} GREATER 3)
-        set(softDeviceHex ${ARGV3})
+        set(softDeviceHex ${ARGV1})
     else()
         message(FATAL_ERROR "Please specified a path to soft device hex file for flashing")
     endif()
 
-    if(${ARGC} GREATER 4)
-        set(mainAppHex ${ARGV4})
+    if(${ARGC} GREATER 2)
+        set(mainAppHex ${ARGV2})
     else()
-        set(mainAppHex ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex)
+        message(FATAL_ERROR "Please specified a path to main application hex file for flashing")
+    endif()
+
+    if(${ARGC} GREATER 3)
+        set(bleBootloaderHex ${ARGV3})
+    else()
+        message(FATAL_ERROR "Please specified a path to ble bootloader hex file for flashing")
     endif()
 
     set(TARGET_NAME "flash_with_ble_bootloader")
 
     add_custom_target(${TARGET_NAME}
-        COMMAND export PROJ_HEX_FILE=${hexFile}
+        COMMAND export PROJ_HEX_FILE=${mainAppHex}
         COMMAND export PROJ_ROOT=${PROJECT_SOURCE_DIR}
         COMMAND nrfjprog -f nrf52 --chiperase
-        COMMAND nrfjprog -f nrf52 --program ${mbrHex} --verify # Flash Master Boot Record
-        COMMAND nrfjprog -f nrf52 --program ${bleBootloaderHex} --verify # Flash BLE bootloader
         COMMAND nrfjprog -f nrf52 --program ${softDeviceHex} --verify # Flash Soft Device
+        COMMAND nrfjprog -f nrf52 --program ${bleBootloaderHex} --verify # Flash BLE bootloader
         COMMAND nrfjprog -f nrf52 --program ${mainAppHex} --verify # Flash Main Application
         VERBATIM USES_TERMINAL
     )
