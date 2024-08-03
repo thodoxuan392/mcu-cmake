@@ -1,6 +1,6 @@
 function(add_nrf52sdk_lib)
     set(oneValueArgs PATH TARGET_NAME)
-    set(multiValueArgs EXTRA_INCLUDES PREPROCESSOR)
+    set(multiValueArgs EXTRA_INCLUDES PREPROCESSOR DEPENDENCES)
     set(options)
 
     cmake_parse_arguments(NRF5SDK "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -10,6 +10,7 @@ function(add_nrf52sdk_lib)
     target_sources(
         ${NRF5SDK_TARGET_NAME}
         PRIVATE
+
         ${NRF5SDK_PATH}/modules/nrfx/soc/nrfx_atomic.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_clock.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_systick.c
@@ -48,7 +49,8 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/libraries/util/app_error_weak.c
         ${NRF5SDK_PATH}/components/libraries/fifo/app_fifo.c
         ${NRF5SDK_PATH}/components/libraries/scheduler/app_scheduler.c
-        ${NRF5SDK_PATH}/components/libraries/timer/app_timer2.c
+
+        ${NRF5SDK_PATH}/components/libraries/timer/app_timer_freertos.c
         ${NRF5SDK_PATH}/components/libraries/uart/app_uart_fifo.c
         ${NRF5SDK_PATH}/components/libraries/util/app_util_platform.c
         ${NRF5SDK_PATH}/components/libraries/timer/drv_rtc.c
@@ -74,6 +76,9 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/libraries/usbd/app_usbd_string_desc.c
         ${NRF5SDK_PATH}/components/boards/boards.c
 
+        ${NRF5SDK_PATH}/external/fprintf/nrf_fprintf.c
+        ${NRF5SDK_PATH}/external/fprintf/nrf_fprintf_format.c
+
         ${NRF5SDK_PATH}/components/ble/common/ble_advdata.c
         ${NRF5SDK_PATH}/components/ble/ble_advertising/ble_advertising.c
         ${NRF5SDK_PATH}/components/ble/common/ble_conn_params.c
@@ -86,19 +91,12 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/softdevice/common/nrf_sdh.c
         ${NRF5SDK_PATH}/components/softdevice/common/nrf_sdh_ble.c
         ${NRF5SDK_PATH}/components/softdevice/common/nrf_sdh_soc.c
-
-        ${NRF5SDK_PATH}/external/segger_rtt/SEGGER_RTT.c
-        ${NRF5SDK_PATH}/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c
-        ${NRF5SDK_PATH}/external/segger_rtt/SEGGER_RTT_printf.c
-        ${NRF5SDK_PATH}/external/utf_converter/utf.c
-        ${NRF5SDK_PATH}/external/fprintf/nrf_fprintf.c
-        ${NRF5SDK_PATH}/external/fprintf/nrf_fprintf_format.c
+        ${NRF5SDK_PATH}/components/softdevice/common/nrf_sdh_freertos.c
     )
 
-    target_include_directories(
-        ${NRF5SDK_TARGET_NAME}
-        SYSTEM
-        PUBLIC
+    list(
+        APPEND
+        NRFSDK_INCLUDE_DIRS
         ${NRF5SDK_PATH}/modules/nrfx/hal
         ${NRF5SDK_PATH}/modules/nrfx/drivers/include
         ${NRF5SDK_PATH}/modules/nrfx/mdk
@@ -206,6 +204,7 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/nfc/t4t_lib
         ${NRF5SDK_PATH}/components/ble/peer_manager
         ${NRF5SDK_PATH}/components/libraries/mem_manager
+        ${NRF5SDK_PATH}/components/libraries/sensorsim
         ${NRF5SDK_PATH}/components/libraries/ringbuf
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_tps
         ${NRF5SDK_PATH}/components/nfc/ndef/parser/message
@@ -236,20 +235,29 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/external/utf_converter
         ${NRF5SDK_PATH}/external/fprintf
         ${NRF5SDK_PATH}/external/segger_rtt
+
+        ${NRF5SDK_PATH}/components/ble/ble_services/ble_hrs_c
     )
+
+    target_include_directories(
+        ${NRF5SDK_TARGET_NAME}
+        SYSTEM
+        PUBLIC
+        ${NRFSDK_INCLUDE_DIRS}
+    )
+
+    set(${NRF5SDK_TARGET_NAME}_INCLUDE_DIRS ${NRFSDK_INCLUDE_DIRS} PARENT_SCOPE)
 
     target_compile_options(
         ${NRF5SDK_TARGET_NAME}
         PRIVATE
-        -O3
+        -O0
         -g3
     )
 
     target_compile_definitions(
         ${NRF5SDK_TARGET_NAME}
         PRIVATE
-        APP_TIMER_V2
-        APP_TIMER_V2_RTC1_ENABLED
         BOARD_PCA10056
         CONFIG_GPIO_AS_PINRESET
         FLOAT_ABI_HARD
@@ -275,40 +283,11 @@ function(add_nrf52sdk_lib)
             ${DEF}
         )
     endforeach()
-endfunction()
 
-function(add_nrf_flash_target #[[scriptPath]] #[[cfgFile]] #[[hexFile]] #[[softDeviceHex]])
-    if(${ARGC} GREATER 0)
-        set(scriptPath ${ARGV0})
-    else()
-        message(FATAL_ERROR "Please specified a script path for OpenOCD")
-    endif()
-
-    if(${ARGC} GREATER 1)
-        set(cfgFile ${ARGV1})
-    else()
-        message(FATAL_ERROR "Please specified a path of openocd cfg file for flashing")
-    endif()
-
-    if(${ARGC} GREATER 2)
-        set(hexFile ${ARGV2})
-    else()
-        message(FATAL_ERROR "Please specified a path to application hex file for flashing")
-    endif()
-
-    if(${ARGC} GREATER 3)
-        set(softDeviceHex ${ARGV3})
-    else()
-        message(FATAL_ERROR "Please specified a path to soft device hex file for flashing")
-    endif()
-
-    set(TARGET_NAME "flash")
-
-    add_custom_target(${TARGET_NAME}
-        COMMAND export PROJ_HEX_FILE=${hexFile}
-        COMMAND export PROJ_ROOT=${PROJECT_SOURCE_DIR}
-        COMMAND nrfjprog -f nrf52 --chiperase --program ${softDeviceHex} --verify
-        COMMAND nrfjprog -f nrf52 --program ${PROJECT_BINARY_DIR}/${PROJECT_NAME}.hex --verify
-        VERBATIM USES_TERMINAL
-    )
+    # Link dependencies libraries
+    foreach(DEPENDENCY ${NRF5SDK_DEPENDENCIES})
+        target_link_libraries(${NRF5SDK_TARGET_NAME}
+            ${DEPENDENCY}
+        )
+    endforeach()
 endfunction()

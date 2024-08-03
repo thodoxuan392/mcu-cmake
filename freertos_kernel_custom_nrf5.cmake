@@ -24,8 +24,8 @@ include_guard()
 # Refer to FreeRTOS documentation for more information                                   #
 # #
 # #######################################################################################################################
-function(add_freertos_lib)
-    set(oneValueArgs PATH TARGET_NAME TARGET_ARCH TARGET_COMPILER USE_HEAP)
+function(add_freertos_custom_nrf5_lib)
+    set(oneValueArgs PATH TARGET_NAME TARGET_CHIP TARGET_COMPILER USE_HEAP)
     set(multiValueArgs EXTRA_INCLUDES PREPROCESSOR)
     set(options USE_TIMERS USE_EVENT_GROUPS USE_STREAM_BUFFERS)
     cmake_parse_arguments(FREERTOS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -42,7 +42,7 @@ function(add_freertos_lib)
         message(FATAL_ERROR "PATH argument required when calling add_freertos_lib")
     endif()
 
-    if(NOT DEFINED FREERTOS_TARGET_ARCH)
+    if(NOT DEFINED FREERTOS_TARGET_CHIP)
         message(FATAL_ERROR "TARGET_ARCH argument required when calling add_freertos_lib")
     endif()
 
@@ -70,8 +70,10 @@ function(add_freertos_lib)
     list(
         APPEND
         FREERTOS_INCLUDE_DIRS
-        ${FREERTOS_PATH}/include
-        ${FREERTOS_PATH}/portable/${FREERTOS_TARGET_COMPILER}/${FREERTOS_TARGET_ARCH}
+        ${FREERTOS_PATH}/source/include
+        ${FREERTOS_PATH}/portable/CMSIS/${FREERTOS_TARGET_CHIP}
+        ${FREERTOS_PATH}/portable/${FREERTOS_TARGET_COMPILER}/${FREERTOS_TARGET_CHIP}
+
         ${FREERTOS_EXTRA_INCLUDES}
     )
 
@@ -83,51 +85,45 @@ function(add_freertos_lib)
 
     set(${FREERTOS_TARGET_NAME}_INCLUDE_DIRS ${FREERTOS_INCLUDE_DIRS} PARENT_SCOPE)
 
-    # # Extra includes
-    # foreach(INC)
-    # target_include_directories(${FREERTOS_TARGET_NAME}
-    # PUBLIC
-    # ${INC}
-    # )
-    # endforeach()
-
     # #########################
     # Add sources           #
     # #########################
     target_sources(${FREERTOS_TARGET_NAME}
         PRIVATE
-        ${FREERTOS_PATH}/tasks.c
-        ${FREERTOS_PATH}/queue.c
-        ${FREERTOS_PATH}/list.c
-        ${FREERTOS_PATH}/portable/${FREERTOS_TARGET_COMPILER}/${FREERTOS_TARGET_ARCH}/port.c
+        ${FREERTOS_PATH}/source/tasks.c
+        ${FREERTOS_PATH}/source/queue.c
+        ${FREERTOS_PATH}/source/list.c
+        ${FREERTOS_PATH}/portable/${FREERTOS_TARGET_COMPILER}/${FREERTOS_TARGET_CHIP}/port.c
+        ${FREERTOS_PATH}/portable/CMSIS/${FREERTOS_TARGET_CHIP}/port_cmsis.c
+        ${FREERTOS_PATH}/portable/CMSIS/${FREERTOS_TARGET_CHIP}/port_cmsis_systick.c
     )
 
     # Optional sources
     if(DEFINED FREERTOS_USE_HEAP)
         target_sources(${FREERTOS_TARGET_NAME}
             PRIVATE
-            ${FREERTOS_PATH}/portable/MemMang/heap_${FREERTOS_USE_HEAP}.c
+            ${FREERTOS_PATH}/source/portable/MemMang/heap_${FREERTOS_USE_HEAP}.c
         )
     endif()
 
     if(FREERTOS_USE_TIMERS)
         target_sources(${FREERTOS_TARGET_NAME}
             PRIVATE
-            ${FREERTOS_PATH}/timers.c
+            ${FREERTOS_PATH}/source/timers.c
         )
     endif()
 
     if(FREERTOS_USE_EVENT_GROUPS)
         target_sources(${FREERTOS_TARGET_NAME}
             PRIVATE
-            ${FREERTOS_PATH}/event_groups.c
+            ${FREERTOS_PATH}/source/event_groups.c
         )
     endif()
 
     if(FREERTOS_USE_STREAM_BUFFERS)
         target_sources(${FREERTOS_TARGET_NAME}
             PRIVATE
-            ${FREERTOS_PATH}/stream_buffer.c
+            ${FREERTOS_PATH}/source/stream_buffer.c
         )
     endif()
 
@@ -146,8 +142,8 @@ function(add_freertos_lib)
     )
 endfunction()
 
-function(find_freertos)
-    set(oneValueArgs PATH TARGET_NAME TARGET_ARCH TARGET_COMPILER USE_HEAP)
+function(find_freertos_custom_nrf52)
+    set(oneValueArgs PATH TARGET_NAME TARGET_CHIP TARGET_COMPILER USE_HEAP)
     set(multiValueArgs EXTRA_INCLUDES PREPROCESSOR)
     set(options USE_TIMERS USE_EVENT_GROUPS USE_STREAM_BUFFERS)
     cmake_parse_arguments(FREERTOS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -164,7 +160,7 @@ function(find_freertos)
         message(FATAL_ERROR "PATH argument required when calling add_freertos_lib")
     endif()
 
-    if(NOT DEFINED FREERTOS_TARGET_ARCH)
+    if(NOT DEFINED FREERTOS_TARGET_CHIP)
         message(FATAL_ERROR "TARGET_ARCH argument required when calling add_freertos_lib")
     endif()
 
@@ -187,9 +183,12 @@ function(find_freertos)
     list(
         APPEND
         FREERTOS_INCLUDE_DIRS
-        ${FREERTOS_PATH}/include
-        ${FREERTOS_PATH}/portable/${FREERTOS_TARGET_COMPILER}/${FREERTOS_TARGET_ARCH}
+        ${FREERTOS_PATH}/source/include
+        ${FREERTOS_PATH}/portable/CMSIS/${FREERTOS_TARGET_CHIP}
+        ${FREERTOS_PATH}/portable/${FREERTOS_TARGET_COMPILER}/${FREERTOS_TARGET_CHIP}
+
         ${FREERTOS_EXTRA_INCLUDES}
     )
+
     set(${FREERTOS_TARGET_NAME}_INCLUDE_DIRS ${FREERTOS_INCLUDE_DIRS} PARENT_SCOPE)
-endfunction(find_freertos)
+endfunction()
