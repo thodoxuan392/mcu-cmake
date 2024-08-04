@@ -23,7 +23,7 @@ function(add_nrf_flash_target #[[scriptPath]] #[[cfgFile]] #[[hexFile]] #[[softD
     add_custom_target(${TARGET_NAME}
         COMMAND export PROJ_HEX_FILE=${hexFile}
         COMMAND export PROJ_ROOT=${PROJECT_SOURCE_DIR}
-        COMMAND nrfjprog -f nrf52 --chiperase
+        COMMAND nrfjprog -f nrf52 --eraseall
         COMMAND nrfjprog -f nrf52 --program ${softDeviceHex} --verify # Flash Soft Device
         COMMAND nrfjprog -f nrf52 --program ${mainAppHex} --verify # Flash Main Application
         VERBATIM USES_TERMINAL
@@ -55,15 +55,37 @@ function(add_nrf_flash_target_with_dfu_over_usb)
         message(FATAL_ERROR "Please specified a path to usb bootloader hex file for flashing")
     endif()
 
+    if(${ARGC} GREATER 4)
+        set(bleBootloaderSettingHex ${ARGV4})
+    else()
+        message(FATAL_ERROR "Please set bootloader setting hex file for flashing")
+    endif()
+
+    if(${ARGC} GREATER 5)
+        set(mainAppVersion ${ARGV5})
+    else()
+        message(FATAL_ERROR "Please set mainApplication version")
+    endif()
+
+    if(${ARGC} GREATER 6)
+        set(bootloaderVersion ${ARGV6})
+    else()
+        message(FATAL_ERROR "Please set bootloader version")
+    endif()
+
     set(TARGET_NAME "flash_with_usb_bootloader")
 
     add_custom_target(${TARGET_NAME}
         COMMAND export PROJ_HEX_FILE=${mainAppHex}
         COMMAND export PROJ_ROOT=${PROJECT_SOURCE_DIR}
-        COMMAND nrfjprog -f nrf52 --chiperase
+        COMMAND nrfutil settings generate --family NRF52 --application ${mainAppHex} --application-version-string ${mainAppVersion} --bootloader-version
+        ${bootloaderVersion} --bl-settings-version 2 --start-address 0xFF000 ${bleBootloaderSettingHex} # Bootloader Setting version is same as bootloader version
+        COMMAND nrfjprog -f nrf52 --eraseall
         COMMAND nrfjprog -f nrf52 --program ${softDeviceHex} --verify # Flash Soft Device
         COMMAND nrfjprog -f nrf52 --program ${usbBootloaderHex} --verify # Flash USB bootloader
+        COMMAND nrfjprog -f nrf52 --program ${bleBootloaderSettingHex} --verify # Flash Bootloader Setting
         COMMAND nrfjprog -f nrf52 --program ${mainAppHex} --verify # Flash Main Application
+        COMMAND nrfjprog --reset
         VERBATIM USES_TERMINAL
     )
 endfunction()
@@ -93,15 +115,117 @@ function(add_nrf_flash_target_with_dfu_over_ble)
         message(FATAL_ERROR "Please specified a path to ble bootloader hex file for flashing")
     endif()
 
+    if(${ARGC} GREATER 4)
+        set(bleBootloaderSettingHex ${ARGV4})
+    else()
+        message(FATAL_ERROR "Please set bootloader setting hex file for flashing")
+    endif()
+
+    if(${ARGC} GREATER 5)
+        set(mainAppVersion ${ARGV5})
+    else()
+        message(FATAL_ERROR "Please set mainApplication version")
+    endif()
+
+    if(${ARGC} GREATER 6)
+        set(bootloaderVersion ${ARGV6})
+    else()
+        message(FATAL_ERROR "Please set bootloader version")
+    endif()
+
     set(TARGET_NAME "flash_with_ble_bootloader")
 
     add_custom_target(${TARGET_NAME}
         COMMAND export PROJ_HEX_FILE=${mainAppHex}
         COMMAND export PROJ_ROOT=${PROJECT_SOURCE_DIR}
-        COMMAND nrfjprog -f nrf52 --chiperase
+        COMMAND nrfutil settings generate --family NRF52 --application ${mainAppHex} --application-version-string ${mainAppVersion} --bootloader-version
+        ${bootloaderVersion} --bl-settings-version 2 --start-address 0xFF000 ${bleBootloaderSettingHex} # Bootloader Setting version is same as bootloader version
+        COMMAND nrfjprog -f nrf52 --eraseall
         COMMAND nrfjprog -f nrf52 --program ${softDeviceHex} --verify # Flash Soft Device
         COMMAND nrfjprog -f nrf52 --program ${bleBootloaderHex} --verify # Flash BLE bootloader
+        COMMAND nrfjprog -f nrf52 --program ${bleBootloaderSettingHex} --verify # Flash Bootloader Setting
         COMMAND nrfjprog -f nrf52 --program ${mainAppHex} --verify # Flash Main Application
+        COMMAND nrfjprog --reset
+        VERBATIM USES_TERMINAL
+    )
+endfunction()
+
+function(add_nrf_update_target_over_usb)
+    if(${ARGC} GREATER 0)
+        set(port ${ARGV0})
+    else()
+        message(FATAL_ERROR "Please specified a port to update")
+    endif()
+
+    if(${ARGC} GREATER 1)
+        set(mainAppHex ${ARGV1})
+    else()
+        message(FATAL_ERROR "Please specified a path to main application hex file for flashing")
+    endif()
+
+    if(${ARGC} GREATER 2)
+        set(mainAppVersion ${ARGV2})
+    else()
+        message(FATAL_ERROR "Please set mainApplication version")
+    endif()
+
+    if(${ARGC} GREATER 3)
+        set(privateKey ${ARGV3})
+    else()
+        message(FATAL_ERROR "Please set privateKey")
+    endif()
+
+    if(${ARGC} GREATER 4)
+        set(dfuZipFile ${ARGV4})
+    else()
+        message(FATAL_ERROR "Please specified a dfuZipFile")
+    endif()
+
+    set(TARGET_NAME "update_over_usb")
+
+    add_custom_target(${TARGET_NAME}
+        COMMAND nrfutil pkg generate --application ${mainAppHex} --application-version-string ${mainAppVersion} --hw-version 52 --sd-req 0x100 --key-file ${privateKey} ${dfuZipFile}
+        COMMAND nrfutil dfu usb-serial -p ${port} -pkg ${dfuZipFile}
+        VERBATIM USES_TERMINAL
+    )
+endfunction()
+
+function(add_nrf_update_target_over_ble)
+    if(${ARGC} GREATER 0)
+        set(bleAddress ${ARGV0})
+    else()
+        message(FATAL_ERROR "Please specified a BLE Mac Address to update")
+    endif()
+
+    if(${ARGC} GREATER 1)
+        set(mainAppHex ${ARGV1})
+    else()
+        message(FATAL_ERROR "Please specified a path to main application hex file for flashing")
+    endif()
+
+    if(${ARGC} GREATER 2)
+        set(mainAppVersion ${ARGV2})
+    else()
+        message(FATAL_ERROR "Please set mainApplication version")
+    endif()
+
+    if(${ARGC} GREATER 3)
+        set(privateKey ${ARGV3})
+    else()
+        message(FATAL_ERROR "Please set privateKey")
+    endif()
+
+    if(${ARGC} GREATER 4)
+        set(dfuZipFile ${ARGV4})
+    else()
+        message(FATAL_ERROR "Please specified a dfuZipFile")
+    endif()
+
+    set(TARGET_NAME "update_over_ble")
+
+    add_custom_target(${TARGET_NAME}
+        COMMAND nrfutil pkg generate --application ${mainAppHex} --application-version-string ${mainAppVersion} --hw-version 52 --sd-req 0x100 --key-file ${privateKey} ${dfuZipFile}
+        COMMAND nrfutil dfu ble -ic NRF52 -a ${bleAddress} -pkg ${dfuZipFile}
         VERBATIM USES_TERMINAL
     )
 endfunction()
