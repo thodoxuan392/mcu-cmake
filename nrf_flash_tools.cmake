@@ -150,6 +150,39 @@ function(add_nrf_flash_target_with_dfu_over_ble)
     )
 endfunction()
 
+function(add_nrf_generate_usb_update_package)
+    if(${ARGC} GREATER 0)
+        set(mainAppHex ${ARGV0})
+    else()
+        message(FATAL_ERROR "Please specified a path to main application hex file for flashing")
+    endif()
+
+    if(${ARGC} GREATER 1)
+        set(mainAppVersion ${ARGV1})
+    else()
+        message(FATAL_ERROR "Please set mainApplication version")
+    endif()
+
+    if(${ARGC} GREATER 2)
+        set(privateKey ${ARGV2})
+    else()
+        message(FATAL_ERROR "Please set privateKey")
+    endif()
+
+    if(${ARGC} GREATER 3)
+        set(dfuZipFile ${ARGV3})
+    else()
+        message(FATAL_ERROR "Please specified a dfuZipFile")
+    endif()
+
+    set(TARGET_NAME "generate_usb_update_package")
+
+    add_custom_target(${TARGET_NAME}
+        COMMAND nrfutil pkg generate --application ${mainAppHex} --application-version-string ${mainAppVersion} --hw-version 52 --sd-req 0x100 --key-file ${privateKey} ${dfuZipFile}
+        VERBATIM USES_TERMINAL
+    )
+endfunction()
+
 function(add_nrf_update_target_over_usb)
     if(${ARGC} GREATER 0)
         set(port ${ARGV0})
@@ -158,25 +191,7 @@ function(add_nrf_update_target_over_usb)
     endif()
 
     if(${ARGC} GREATER 1)
-        set(mainAppHex ${ARGV1})
-    else()
-        message(FATAL_ERROR "Please specified a path to main application hex file for flashing")
-    endif()
-
-    if(${ARGC} GREATER 2)
-        set(mainAppVersion ${ARGV2})
-    else()
-        message(FATAL_ERROR "Please set mainApplication version")
-    endif()
-
-    if(${ARGC} GREATER 3)
-        set(privateKey ${ARGV3})
-    else()
-        message(FATAL_ERROR "Please set privateKey")
-    endif()
-
-    if(${ARGC} GREATER 4)
-        set(dfuZipFile ${ARGV4})
+        set(dfuZipFile ${ARGV1})
     else()
         message(FATAL_ERROR "Please specified a dfuZipFile")
     endif()
@@ -184,8 +199,40 @@ function(add_nrf_update_target_over_usb)
     set(TARGET_NAME "update_over_usb")
 
     add_custom_target(${TARGET_NAME}
-        COMMAND nrfutil pkg generate --application ${mainAppHex} --application-version-string ${mainAppVersion} --hw-version 52 --sd-req 0x100 --key-file ${privateKey} ${dfuZipFile}
         COMMAND nrfutil dfu usb-serial -p ${port} -pkg ${dfuZipFile}
+        VERBATIM USES_TERMINAL
+    )
+endfunction()
+
+function(add_nrf_generate_ble_update_package)
+    if(${ARGC} GREATER 0)
+        set(mainAppHex ${ARGV0})
+    else()
+        message(FATAL_ERROR "Please specified a path to main application hex file for flashing")
+    endif()
+
+    if(${ARGC} GREATER 1)
+        set(mainAppVersion ${ARGV1})
+    else()
+        message(FATAL_ERROR "Please set mainApplication version")
+    endif()
+
+    if(${ARGC} GREATER 2)
+        set(privateKey ${ARGV2})
+    else()
+        message(FATAL_ERROR "Please set privateKey")
+    endif()
+
+    if(${ARGC} GREATER 3)
+        set(dfuZipFile ${ARGV3})
+    else()
+        message(FATAL_ERROR "Please specified a dfuZipFile")
+    endif()
+
+    set(TARGET_NAME "generate_ble_update_package")
+
+    add_custom_target(${TARGET_NAME}
+        COMMAND nrfutil pkg generate --application ${mainAppHex} --application-version-string ${mainAppVersion} --hw-version 52 --sd-req 0x100 --key-file ${privateKey} ${dfuZipFile}
         VERBATIM USES_TERMINAL
     )
 endfunction()
@@ -198,25 +245,7 @@ function(add_nrf_update_target_over_ble)
     endif()
 
     if(${ARGC} GREATER 1)
-        set(mainAppHex ${ARGV1})
-    else()
-        message(FATAL_ERROR "Please specified a path to main application hex file for flashing")
-    endif()
-
-    if(${ARGC} GREATER 2)
-        set(mainAppVersion ${ARGV2})
-    else()
-        message(FATAL_ERROR "Please set mainApplication version")
-    endif()
-
-    if(${ARGC} GREATER 3)
-        set(privateKey ${ARGV3})
-    else()
-        message(FATAL_ERROR "Please set privateKey")
-    endif()
-
-    if(${ARGC} GREATER 4)
-        set(dfuZipFile ${ARGV4})
+        set(dfuZipFile ${ARGV1})
     else()
         message(FATAL_ERROR "Please specified a dfuZipFile")
     endif()
@@ -224,7 +253,6 @@ function(add_nrf_update_target_over_ble)
     set(TARGET_NAME "update_over_ble")
 
     add_custom_target(${TARGET_NAME}
-        COMMAND nrfutil pkg generate --application ${mainAppHex} --application-version-string ${mainAppVersion} --hw-version 52 --sd-req 0x100 --key-file ${privateKey} ${dfuZipFile}
         COMMAND nrfutil dfu ble -ic NRF52 -a ${bleAddress} -pkg ${dfuZipFile}
         VERBATIM USES_TERMINAL
     )

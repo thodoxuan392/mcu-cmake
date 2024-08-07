@@ -74,6 +74,7 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/libraries/usbd/app_usbd_core.c
         ${NRF5SDK_PATH}/components/libraries/usbd/app_usbd_serial_num.c
         ${NRF5SDK_PATH}/components/libraries/usbd/app_usbd_string_desc.c
+        ${NRF5SDK_PATH}/components/libraries/bootloader/dfu/nrf_dfu_svci.c
         ${NRF5SDK_PATH}/components/boards/boards.c
 
         ${NRF5SDK_PATH}/external/fprintf/nrf_fprintf.c
@@ -88,6 +89,10 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/ble/nrf_ble_gatt/nrf_ble_gatt.c
         ${NRF5SDK_PATH}/components/ble/nrf_ble_qwr/nrf_ble_qwr.c
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_nus/ble_nus.c
+        ${NRF5SDK_PATH}/components/ble/ble_services/ble_dfu/ble_dfu.c
+        ${NRF5SDK_PATH}/components/ble/ble_services/ble_dfu/ble_dfu_bonded.c
+        ${NRF5SDK_PATH}/components/ble/ble_services/ble_dfu/ble_dfu_unbonded.c
+        ${NRF5SDK_PATH}/components/ble/nrf_ble_qwr/nrf_ble_qwr.c
         ${NRF5SDK_PATH}/components/softdevice/common/nrf_sdh.c
         ${NRF5SDK_PATH}/components/softdevice/common/nrf_sdh_ble.c
         ${NRF5SDK_PATH}/components/softdevice/common/nrf_sdh_soc.c
@@ -122,6 +127,8 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/libraries/mutex
         ${NRF5SDK_PATH}/components/libraries/gfx
         ${NRF5SDK_PATH}/components/libraries/bootloader/ble_dfu
+        ${NRF5SDK_PATH}/components/libraries/bootloader/dfu
+        ${NRF5SDK_PATH}/components/libraries/bootloader
         ${NRF5SDK_PATH}/components/nfc/ndef/connection_handover/common
         ${NRF5SDK_PATH}/components/libraries/fifo
         ${NRF5SDK_PATH}/components/boards
@@ -129,6 +136,7 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/nfc/t4t_parser/cc_file
         ${NRF5SDK_PATH}/components/ble/ble_advertising
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_bas_c
+        ${NRF5SDK_PATH}/components/ble/nrf_ble_qwr
         ${NRF5SDK_PATH}/components/libraries/experimental_task_manager
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_hrs_c
         ${NRF5SDK_PATH}/components/softdevice/s140/headers/nrf52
@@ -138,6 +146,7 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/components/ble/ble_dtm
         ${NRF5SDK_PATH}/components/toolchain/cmsis/include
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_rscs_c
+        ${NRF5SDK_PATH}/components/ble/ble_services/ble_dfu
         ${NRF5SDK_PATH}/components/ble/common
         ${NRF5SDK_PATH}/components/ble/ble_services/ble_lls
         ${NRF5SDK_PATH}/components/nfc/platform
