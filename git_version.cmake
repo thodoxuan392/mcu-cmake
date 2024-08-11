@@ -1,4 +1,4 @@
-function(git_get_version VERSION_TAG VERSION_TAG_NO_DIRTY VERSION_COMMIT)
+function(git_get_version VERSION_TAG VERSION_PRE_RELEASE VERSION_TAG_NO_DIRTY VERSION_COMMIT)
     find_package(Git)
 
     if(GIT_FOUND)
@@ -7,6 +7,7 @@ function(git_get_version VERSION_TAG VERSION_TAG_NO_DIRTY VERSION_COMMIT)
 
     # Default version
     set(VERSION_TAG "UNKNOWN" PARENT_SCOPE)
+    set(VERSION_PRE_RELEASE "UNKNOWN" PARENT_SCOPE)
     set(VERSION_TAG_NO_DIRTY "UNKNOWN" PARENT_SCOPE)
     set(VERSION_COMMIT "UNKNOWN" PARENT_SCOPE)
 
@@ -19,20 +20,28 @@ function(git_get_version VERSION_TAG VERSION_TAG_NO_DIRTY VERSION_COMMIT)
         message(FATAL_ERROR "Please create a version tag")
     endif()
 
-    message(${VERSION_RAW} ${VERSION_RAW})
-
     if(${CMD_SUCCESS} STREQUAL "0")
         # Replace '-' with ';' to be detected as separators by CMake
         string(REPLACE "-" ";" VERSION_RAW ${VERSION_RAW})
-        list(GET VERSION_RAW 0 TAG)
-        list(GET VERSION_RAW 1 COMMIT_FROM_TAG)
-        list(GET VERSION_RAW 2 COMMIT)
+        list(LENGTH VERSION_RAW VERSION_LENGTH)
+
+        if(${VERSION_LENGTH} EQUAL 3)
+            list(GET VERSION_RAW 0 TAG)
+            list(GET VERSION_RAW 1 COMMIT_FROM_TAG)
+            list(GET VERSION_RAW 2 COMMIT)
+        else()
+            list(GET VERSION_RAW 0 TAG)
+            list(GET VERSION_RAW 1 PRE_RELEASE)
+            list(GET VERSION_RAW 2 COMMIT_FROM_TAG)
+            list(GET VERSION_RAW 3 COMMIT)
+        endif()
 
         # Remove the 'g' at the beginning of the commit
         string(SUBSTRING ${COMMIT} 1 -1 COMMIT)
 
         # Strip the strings
         string(STRIP ${TAG} TAG)
+        string(STRIP ${PRE_RELEASE} PRE_RELEASE)
         string(STRIP ${COMMIT_FROM_TAG} COMMIT_FROM_TAG)
         string(STRIP ${COMMIT} COMMIT)
 
@@ -44,7 +53,7 @@ function(git_get_version VERSION_TAG VERSION_TAG_NO_DIRTY VERSION_COMMIT)
             set(VERSION_TAG "${TAG}+${COMMIT_FROM_TAG}" PARENT_SCOPE)
         endif()
 
-        list(LENGTH VERSION_RAW VERSION_LENGTH)
+        set(VERSION_PRE_RELEASE "${PRE_RELEASE}" PARENT_SCOPE)
 
         if(${VERSION_LENGTH} GREATER 3)
             set(VERSION_COMMIT "${COMMIT}+" PARENT_SCOPE)
