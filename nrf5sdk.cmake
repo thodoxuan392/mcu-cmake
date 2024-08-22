@@ -30,6 +30,7 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_timer.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_rtc.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_usbd.c
+        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_wdt.c
 
         ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_clock.c
         ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_power.c
