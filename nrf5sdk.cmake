@@ -25,8 +25,8 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_twi.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_twim.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_qspi.c
-        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_spi.c
-        ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_spim.c
+        # ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_spi.c
+        # ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_spim.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_timer.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_rtc.c
         ${NRF5SDK_PATH}/modules/nrfx/drivers/src/nrfx_usbd.c
@@ -37,7 +37,7 @@ function(add_nrf52sdk_lib)
         ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_ppi.c
         ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_uart.c
         ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_twi.c
-        ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_spi.c
+        # ${NRF5SDK_PATH}/integration/nrfx/legacy/nrf_drv_spi.c
 
         ${NRF5SDK_PATH}/components/libraries/log/src/nrf_log_backend_rtt.c
         ${NRF5SDK_PATH}/components/libraries/log/src/nrf_log_backend_serial.c
