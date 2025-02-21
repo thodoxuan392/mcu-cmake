@@ -33,6 +33,7 @@ add_compile_options(
     -fno-exceptions
     -ffunction-sections
     -fdata-sections
+    -fdata-sections
     --specs=nano.specs
 )
 
@@ -46,8 +47,7 @@ add_link_options(
     -mfloat-abi=soft
     -fno-exceptions
     -fno-rtti
-    -Xlinker
-    --gc-sections
+    -Wl,--gc-sections
     --specs=nosys.specs
     --specs=nano.specs
 )

@@ -17,8 +17,7 @@ function(add_wic_lib)
     list(
         APPEND
         WIC_INCLUDE_DIRS
-        ${WIC_PATH}/include/http_parser.h
-        ${WIC_PATH}/include/wic.h
+        ${WIC_PATH}/include
     )
 
     target_include_directories(

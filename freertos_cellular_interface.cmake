@@ -22,18 +22,11 @@ function(add_freertos_cellular_inteface_lib)
     list(
         APPEND
         FREERTOS_CELLULAR_INTERFACE_INCLUDE_DIRS
-        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/include/common/cellular_at_core.h
-        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/include/common/cellular_common_api.h
-        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/include/common/cellular_common_portable.h
-        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/include/common/cellular_common.h
-        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/include/private/cellular_common_internal.h
-        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/include/private/cellular_internal.h
-        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/include/private/cellular_pkthandler_internal.h
-        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/include/private/cellular_pktio_internal.h
-        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/interface/cellular_comm_interface.h
-        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/cellular_api.h
-        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/cellular_config_defaults.h
-        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/cellular_types.h
+        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/include
+        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/include/common
+        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/include/private
+        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source/interface
+        ${FREERTOS_CELLULAR_INTERFACE_PATH}/source
     )
 
     target_include_directories(

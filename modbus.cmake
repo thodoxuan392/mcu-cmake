@@ -32,6 +32,6 @@ function(add_modbus_lib)
         ${MODBUS_TARGET_NAME}
         SYSTEM
         PUBLIC
-        ${MODBUS_PATH}
+        ${MODBUS_PATH}/inc
     )
 endfunction()

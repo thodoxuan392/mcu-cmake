@@ -11,6 +11,6 @@ function(add_jsmn_lib)
         ${JSMN_TARGET_NAME}
         SYSTEM
         INTERFACE
-        ${JSMN_PATH}/jsmn.h
+        ${JSMN_PATH}
     )
 endfunction()

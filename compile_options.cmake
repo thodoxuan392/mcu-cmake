@@ -13,7 +13,7 @@ function(set_default_c_language #[[target]])
         PROPERTIES
         C_STANDARD 11
         C_STANDARD_REQUIRED ON
-        C_EXTENSIONS OFF
+        C_EXTENSIONS ON
     )
 endfunction()
 

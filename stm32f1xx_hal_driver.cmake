@@ -1,6 +1,6 @@
 function(add_stm32_f1xx_driver_lib)
     set(oneValueArgs PATH TARGET_NAME)
-    set(multiValueArgs EXTRA_INCLUDES PREPROCESSOR DEPENDENCES)
+    set(multiValueArgs EXTRA_INCLUDES PREPROCESSOR DEPENDENCIES)
     set(options)
 
     cmake_parse_arguments(STM32_F1XX_DRIVER "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -34,7 +34,6 @@ function(add_stm32_f1xx_driver_lib)
         ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_irda.c
         ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_iwdg.c
         ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_mmc.c
-        ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_msp_template.c
         ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_nand.c
         ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_nor.c
         ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_pccard.c
@@ -50,8 +49,6 @@ function(add_stm32_f1xx_driver_lib)
         ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_spi.c
         ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_sram.c
         ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_tim.c
-        ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_timebase_rtc_alarm_template.c
-        ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_timebase_tim_template.c
         ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_tim_ex.c
         ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_uart.c
         ${STM32_F1XX_DRIVER_PATH}/Src/stm32f1xx_hal_usart.c
@@ -78,77 +75,8 @@ function(add_stm32_f1xx_driver_lib)
     list(
         APPEND
         STM32_F1XX_DRIVER_INCLUDE_DIRS
-        ${STM32_F1XX_DRIVER_PATH}/Inc/Legacy/stm32_hal_legacy.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/Legacy/stm32f1xx_hal_can_ex_legacy.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/Legacy/stm32f1xx_hal_can_legacy.h
-
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32_assert_template.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_adc_ex.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_adc.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_can.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_cec.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_conf_template.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_cortex.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_crc.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_dac_ex.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_dac.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_def.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_dma_ex.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_dma.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_eth.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_exti.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_flash_ex.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_flash.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_gpio_ex.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_gpio.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/ stm32f1xx_hal.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_hcd.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_i2c.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_i2s.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_irda.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_iwdg.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_mmc.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_nand.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_nor.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_pccard.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_pcd_ex.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_pcd.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_pwr.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_rcc_ex.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_rcc.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_rtc_ex.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_rtc.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_sd.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_smartcard.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_spi.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_sram.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_tim_ex.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_tim.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_uart.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_usart.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_hal_wwdg.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_adc.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_bus.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_cortex.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_crc.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_dac.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_dma.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_exti.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_fsmc.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_gpio.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_i2c.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_iwdg.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_pwr.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_rcc.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_rtc.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_sdmmc.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_spi.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_system.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_tim.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_usart.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_usb.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_utils.h
-        ${STM32_F1XX_DRIVER_PATH}/Inc/stm32f1xx_ll_wwdg.h
+        ${STM32_F1XX_DRIVER_PATH}/Inc/Legacy
+        ${STM32_F1XX_DRIVER_PATH}/Inc
     )
 
     target_include_directories(

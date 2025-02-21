@@ -23,8 +23,8 @@ function(add_freertos_cellular_module_lib)
     list(
         APPEND
         FREERTOS_CELLULAR_MODULE_INCLUDE_DIRS
-        ${FREERTOS_CELLULAR_MODULE_PATH}/esp32/cellular_esp32.h
-        ${FREERTOS_CELLULAR_MODULE_PATH}/sim7600/cellular_sim7600.h
+        ${FREERTOS_CELLULAR_MODULE_PATH}/esp32
+        ${FREERTOS_CELLULAR_MODULE_PATH}/sim7600
     )
 
     target_include_directories(
