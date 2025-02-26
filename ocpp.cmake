@@ -11,7 +11,7 @@ function(add_ocpp_lib)
         ${OCPP_TARGET_NAME}
         PRIVATE
         ${OCPP_PATH}/src/Ocpp.c
-        ${OCPP_PATH}/src/OcppDateTime.c
+        ${OCPP_PATH}/src/OcppJson.c
         ${OCPP_PATH}/src/message/OcppAuthorize.c
         ${OCPP_PATH}/src/message/OcppBootNotification.c
         ${OCPP_PATH}/src/message/OcppCancelReservation.c
